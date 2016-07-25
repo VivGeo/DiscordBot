@@ -24,3 +24,7 @@ A list of its commands:
 |o!crits|allows user to see how many critical successes (a natural 20 on a twenty-sided die) and critical fails (a natural 1 on a twenty-sided die) they've rolled|
 |o!spell fireball|outputs the spell description of fireball (uses ephe.github.io/grimoire/)|
 
+v .95
+TODO:
+Removed SQL, readding
+Clean up code
