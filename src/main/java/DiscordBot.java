@@ -72,7 +72,7 @@ public class DiscordBot {
         critFails.put("2866",0);
         critFails.put("4343",0);
         critFails.put("5645",0);
-        client = new ClientBuilder().withToken("MTk5NTU4NDU3MjExMjI0MDY0.Clwcyw.ynztH86c2UbueWGsAauWFafj0Gg").login();
+        client = new ClientBuilder().withToken(/*BOT TOKEN*/).login();
         client.getDispatcher().registerListener(new AnnotationListener(characters,dailies,credits,crits,critFails));
 
     }
