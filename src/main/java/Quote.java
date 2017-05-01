@@ -18,6 +18,7 @@ public class Quote {
         time = message.getTimestamp();
     }
 
+    //test
     public Quote() {
         text = "Now I am become Death, the destroyer of Worlds";
         channel = "Bhagavad Gita";
