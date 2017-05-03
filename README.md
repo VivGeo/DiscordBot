@@ -21,8 +21,8 @@ A list of its commands:
 |;coin|outputs the result of a coin toss|
 |;bet|allows two users to bet on the result of a coin toss|
 |;crits|allows user to see how many critical successes (a natural 20 on a twenty-sided die) and critical fails (a natural 1 on a twenty-sided die) they've rolled|
-|;spell fireball|outputs the spell description of fireball (uses ephe.github.io/grimoire/)|
-
+|;spell fireball|outputs the spell description of fireball (uses open5e.com)|
+|;spells bard 1|outputs the list of 1st level bard spells|
 v 1.00
 TODO:
 Removed SQL
