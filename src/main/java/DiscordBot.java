@@ -2,9 +2,8 @@ import sx.blah.discord.api.ClientBuilder;
 import sx.blah.discord.api.IDiscordClient;
 import sx.blah.discord.util.DiscordException;
 
-import java.util.HashMap;
-
 import java.time.LocalDateTime;
+import java.util.HashMap;
 /**
  * Created by vivek on 2016-07-07.
  */
@@ -33,7 +32,7 @@ public class DiscordBot {
 
         for (int i = 0; i < name.length; i++)
         {
-            characters.put(name[i][0],name[i][0]);   
+            characters.put(name[i][0], name[i][1]);
             dailies.put(name[i][0],LocalDateTime.now().minusDays(1));
             credits.put(name[i][0], 0);
             crits.put(name[i][0],0);

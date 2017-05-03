@@ -1,7 +1,7 @@
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-
 import sx.blah.discord.api.events.EventSubscriber;
 import sx.blah.discord.handle.impl.events.MessageReceivedEvent;
 import sx.blah.discord.handle.impl.events.ReadyEvent;
@@ -42,10 +42,10 @@ public class AnnotationListener {
     private static int amount;
     private static long hours, minutes;
     private static Duration duration;
+    private static int index;
 
-    private static enum Bet {ON, OFF}
+    private enum Bet {ON, OFF}
 
-    ;
     private static Bet bet = Bet.OFF;
     private static String better;
     private static int reward;
@@ -56,11 +56,11 @@ public class AnnotationListener {
         quotes = new HashMap<Integer, Quote>();
 
         quotes.put(0, new Quote());
-        this.characters = characters;
-        this.dailies = dailies;
-        this.credits = credits;
-        this.crits = crits;
-        this.critFails = critFails;
+        AnnotationListener.characters = characters;
+        AnnotationListener.dailies = dailies;
+        AnnotationListener.credits = credits;
+        AnnotationListener.crits = crits;
+        AnnotationListener.critFails = critFails;
 
 
     }
@@ -105,7 +105,7 @@ public class AnnotationListener {
     public void onReady(ReadyEvent event) {
         try {
             DiscordBot.client.changeUsername("Robo-Gary");
-            DiscordBot.client.changeStatus(Status.game("Half Life 3"));
+            DiscordBot.client.changeStatus(Status.game("D&D!"));
         } catch (RateLimitException | DiscordException e) {
             e.printStackTrace();
         }
@@ -117,14 +117,14 @@ public class AnnotationListener {
         try {
             message = event.getMessage().getContent().toLowerCase();
             //Making sure message is a command
-            if (message.substring(0, 2).startsWith("o!")) {
+            if (message.substring(0, 2).startsWith(";")) {
                 //Output list of commands
-                if (message.contains("o!help")) {
-                    new MessageBuilder(DiscordBot.client).withChannel(event.getMessage().getChannel()).withContent("o!greetings\no!guidance \no!orison \no!light [object]\no!dailies\ncredits\no!1d20\no!quote 0\n0!quote add \no!quote edit \no!quote del +\no!oin + \no!bet").build();
+                if (message.contains(";help")) {
+                    new MessageBuilder(DiscordBot.client).withChannel(event.getMessage().getChannel()).withContent(";greetings\n;guidance \n;orison \n;light [object]\n;dailies\ncredits\n;1d20\n;quote 0\n0!quote add \n;quote edit \n;quote del +\n;coin + \n;bet").build();
                     System.out.println(event.getMessage().getAuthor().getID());
                 }
                 //Daily rewards users may collect
-                else if (message.contains("o!dailies")) {
+                else if (message.contains(";dailies")) {
                     if (LocalDateTime.now().isAfter((dailies.get(event.getMessage().getAuthor().getDiscriminator()).plusDays(1)))) {
                         amount = credits.get(event.getMessage().getAuthor().getDiscriminator()) + 200;
                         credits.put(event.getMessage().getAuthor().getDiscriminator(), amount);
@@ -206,51 +206,87 @@ public class AnnotationListener {
                     }
                 }
                 //Outputs user's number of points
-                else if (message.contains("o!credits")) {
+                else if (message.contains(";credits")) {
                     new MessageBuilder(DiscordBot.client).withChannel(event.getMessage().getChannel()).withContent(getName(event.getMessage()) + ", you have :dollar: $" + credits.get(event.getMessage().getAuthor().getDiscriminator())).build();
                 }
                 //outputs the randomized greeting
-                else if (message.contains("o!greeting")) {
+                else if (message.contains(";greeting")) {
                     new MessageBuilder(DiscordBot.client).withChannel(event.getMessage().getChannel()).withContent(greeting(getName(event.getMessage()))).build();
                 }
                 //Parses a webpage of an online library of D&D 5e spells for the spell description and outputs it
-                else if (message.contains("o!spell")) {
-                    try {
-                        spell = message.substring(message.indexOf(" ") + 1);
-                        Document doc = Jsoup.connect("http://ephe.github.io/grimoire/spells/" + spell.replace(" ", "-")).get();
-                        Elements spellDesc = doc.select(".post-content p");
-                        new MessageBuilder(DiscordBot.client).withChannel(event.getMessage().getChannel()).withContent(spellDesc.get(0).text() + "\n" + spellDesc.get(1).text() + "\n" + spellDesc.get(2).text() + "\n" + spellDesc.get(3).text() + "\n" + spellDesc.get(4).text() + "\n" + spellDesc.get(5).text()).build();
-                        System.out.println(spellDesc.text());
-                    } catch (Exception e) {
-                        new MessageBuilder(DiscordBot.client).withChannel(event.getMessage().getChannel()).withContent("Invalid Input").build();
-                    }
+                else if (message.contains(";spell")) {
+                    String text = "";
+                    if (message.charAt(6) == ' ') {
+                        try {
+                            spell = message.substring(message.indexOf(" ") + 1);
+                            Document doc = Jsoup.connect("https://open5e.com/Spellcasting/spells_a-z/" + spell.charAt(0) + "/" + spell.replace(" ", "-") + ".html").get();
+                            Elements spellDesc = doc.select("div.section p");
+                            text = "**" + spell.toUpperCase() + "**\n\n";
+                            for (int i = 0; i < spellDesc.size(); i++) {
+                                if (!spellDesc.get(i).text().contains(":")) {
+                                    index = i;
+                                    break;
+                                }
+                            }
+                            for (int i = 0; i < index; i++) {
+                                text += "*" + spellDesc.get(i).text().replace(":", ":*") + "\n";
+                            }
+                            text += "\n";
+                            for (int i = index; i < spellDesc.size(); i++) {
+                                text += spellDesc.get(i).text() + "\n\n";
+                            }
 
+                            new MessageBuilder(DiscordBot.client).withChannel(event.getMessage().getChannel()).withContent(text).build();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            System.out.println(text);
+                            new MessageBuilder(DiscordBot.client).withChannel(event.getMessage().getChannel()).withContent("Invalid Input").build();
+                        }
+                    } else if (message.startsWith(";spells ")) {
+                        try {
+                            String[] arguments = message.split("\\s+");
+                            Document doc = Jsoup.connect("https://open5e.com/Spellcasting/by-class/" + arguments[1] + ".html").get();
+                            Elements spells = doc.select("div.section");
+                            Element level = spells.get(Integer.parseInt(arguments[2]) + 1);
+                            Elements spellList = level.select("li");
+                            text = "**LEVEL " + arguments[2] + " " + arguments[1].toUpperCase() + " SPELLS**\n";
+                            for (int i = 0; i < spellList.size(); i++) {
+                                System.out.println(spellList.get(i).text());
+                                text += spellList.get(i).text() + "\n";
+                            }
+                            new MessageBuilder(DiscordBot.client).withChannel(event.getMessage().getChannel()).withContent(text).build();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            System.out.println(text);
+                            new MessageBuilder(DiscordBot.client).withChannel(event.getMessage().getChannel()).withContent("Invalid Input").build();
+                        }
+                    }
                 }
                 //D&D custom commands for my particular character
-                else if (message.contains("o!guidance")) {
+                else if (message.contains(";guidance")) {
                     new MessageBuilder(DiscordBot.client).withChannel(event.getMessage().getChannel()).withContent("Oskar casts guidance on " + getName(event.getMessage()) + ".").build();
-                } else if (message.contains("o!orison")) {
+                } else if (message.contains(";orison")) {
                     new MessageBuilder(DiscordBot.client).withChannel(event.getMessage().getChannel()).withContent("Oskar casts orison on " + getName(event.getMessage()) + ".").build();
-                } else if (message.contains("o!light")) {
+                } else if (message.contains(";light")) {
                     light = message.substring(8);
                     new MessageBuilder(DiscordBot.client).withChannel(event.getMessage().getChannel()).withContent("Oskar casts light on " + getName(event.getMessage()) + "'s " + light + ".").build();
                 }
                 //User can see the critical records
-                else if (message.contains("o!crits")) {
+                else if (message.contains(";crits")) {
                     new MessageBuilder(DiscordBot.client).withChannel(event.getMessage().getChannel()).withContent("Oskar casts light on " + getName(event.getMessage()) + "'s " + light + ".").build();
                 }
                 //Chat quote management system, where users can save quotes of chat messages and view, edit or delete them later
-                else if (message.contains("o!quote")) {
-                    if (message.contains("o!quote add ")) {
+                else if (message.contains(";quote")) {
+                    if (message.contains(";quote add ")) {
                         quote = new Quote(event.getMessage());
                         Quote.number++;
                         quotes.put(Quote.number, quote);
                         new MessageBuilder(DiscordBot.client).withChannel(event.getMessage().getChannel()).withContent("Quote " + Quote.number + " added.").build();
-                    } else if (message.contains("o!quote edit ")) {
+                    } else if (message.contains(";quote edit ")) {
                         num = Integer.parseInt(message.split(" ")[2]);
                         quotes.get(num).setText(event.getMessage().getContent().substring(12));
                         new MessageBuilder(DiscordBot.client).withChannel(event.getMessage().getChannel()).withContent("Quote " + num + " edited.").build();
-                    } else if (message.contains("o!quote del ")) {
+                    } else if (message.contains(";quote del ")) {
                         num = Integer.parseInt(message.split(" ")[2]);
                         quotes.get(num).setText("This quote no longer exists");
                         new MessageBuilder(DiscordBot.client).withChannel(event.getMessage().getChannel()).withContent("Quote " + num + " removed.").build();
@@ -261,14 +297,14 @@ public class AnnotationListener {
                     }
                 }
                 //Messages the result of a coin toss
-                else if (message.contains("o!coin")) {
+                else if (message.contains(";coin")) {
                     if ((int) (Math.random() * 2) == 1)
                         new MessageBuilder(DiscordBot.client).withChannel(event.getMessage().getChannel()).withContent("Heads").build();
                     else
                         new MessageBuilder(DiscordBot.client).withChannel(event.getMessage().getChannel()).withContent("Tails").build();
                 }
                 //Two users may bet against each other on a coin toss and exchange credits according to the result
-                else if (message.contains("o!bet")) {
+                else if (message.contains(";bet")) {
                     if (bet == Bet.OFF) {
                         bet = Bet.ON;
                         better = event.getMessage().getAuthor().getDiscriminator();

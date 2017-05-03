@@ -8,23 +8,23 @@ A list of its commands:
 
 | Command       | Explanation           | 
 | :-------------: |:-------------|
-|o!help   |outputs a list of commands |
-|o!greetings      |returns a greeting|
-|o!guidance/o!orison/o!light |Performs a D&D action my particular character can perform|
-|o!dailies|allows user to collect daily credit rewards|
-|o!credits|outputs user's number of credits|
-|o!1d20|outputs a randomized roll of 1 twenty-sided die|
-|o!1d20 + 1|outputs a randomized roll of 1 twenty sided die with a dice modifier of +1|
-|o!quote add Hello, World| saves "Hello, World" as a chat quote|
-|o!quote 1|outputs quote #1|
-|o!quote edit 1 Hello, World|edits quote #1 to "Hello, World"|
-|o!quote del 1|deletes quote #1|
-|o!coin|outputs the result of a coin toss|
-|o!bet|allows two users to bet on the result of a coin toss|
-|o!crits|allows user to see how many critical successes (a natural 20 on a twenty-sided die) and critical fails (a natural 1 on a twenty-sided die) they've rolled|
-|o!spell fireball|outputs the spell description of fireball (uses ephe.github.io/grimoire/)|
+|;help   |outputs a list of commands |
+|;greetings      |returns a greeting|
+|;guidance/;orison/;light |Performs a D&D action my particular character can perform|
+|;dailies|allows user to collect daily credit rewards|
+|;credits|outputs user's number of credits|
+|;1d20|outputs a randomized roll of 1 twenty-sided die|
+|;1d20 + 1|outputs a randomized roll of 1 twenty sided die with a dice modifier of +1|
+|;quote add Hello, World| saves "Hello, World" as a chat quote|
+|;quote 1|outputs quote #1|
+|;quote edit 1 Hello, World|edits quote #1 to "Hello, World"|
+|;quote del 1|deletes quote #1|
+|;coin|outputs the result of a coin toss|
+|;bet|allows two users to bet on the result of a coin toss|
+|;crits|allows user to see how many critical successes (a natural 20 on a twenty-sided die) and critical fails (a natural 1 on a twenty-sided die) they've rolled|
+|;spell fireball|outputs the spell description of fireball (uses ephe.github.io/grimoire/)|
 
 v .95
 TODO:
-Removed SQL, readding
+Removed SQL
 Clean up code
