@@ -10,7 +10,6 @@ A list of its commands:
 | :-------------: |:-------------|
 |;help   |outputs a list of commands |
 |;greetings      |returns a greeting|
-|;guidance/;orison/;light |Performs a D&D action my particular character can perform|
 |;dailies|allows user to collect daily credit rewards|
 |;credits|outputs user's number of credits|
 |;1d20|outputs a randomized roll of 1 twenty-sided die|

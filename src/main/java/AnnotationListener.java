@@ -262,15 +262,6 @@ public class AnnotationListener {
                         }
                     }
                 }
-                //D&D custom commands for my particular character
-                else if (message.contains(";guidance")) {
-                    new MessageBuilder(DiscordBot.client).withChannel(event.getMessage().getChannel()).withContent("Oskar casts guidance on " + getName(event.getMessage()) + ".").build();
-                } else if (message.contains(";orison")) {
-                    new MessageBuilder(DiscordBot.client).withChannel(event.getMessage().getChannel()).withContent("Oskar casts orison on " + getName(event.getMessage()) + ".").build();
-                } else if (message.contains(";light")) {
-                    light = message.substring(8);
-                    new MessageBuilder(DiscordBot.client).withChannel(event.getMessage().getChannel()).withContent("Oskar casts light on " + getName(event.getMessage()) + "'s " + light + ".").build();
-                }
                 //User can see the critical records
                 else if (message.contains(";crits")) {
                     new MessageBuilder(DiscordBot.client).withChannel(event.getMessage().getChannel()).withContent("Oskar casts light on " + getName(event.getMessage()) + "'s " + light + ".").build();
